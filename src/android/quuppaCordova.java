@@ -26,7 +26,12 @@ public class quuppaCordova extends CordovaPlugin{
 		JSONObject send = new JSONObject();
 		if(action.equals("getData")){
 			send.put("obj", obj);
-
+			try{
+				dsocket.receive(packet);
+				obj = new String(buffer, 0, packet.getLength());
+			}catch(Exception e){
+            	System.err.println(e);
+        	}
 			callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, send));
 			return true;
 		}
