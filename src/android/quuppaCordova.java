@@ -8,16 +8,19 @@ import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import java.util.Random;
 
 public class quuppaCordova extends CordovaPlugin{
+	private Random rand = new Random();
+	private int num = rand.nextInt(50);
+
 	public quuppaCordova(){}
 
 	@Override
 	public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException{
 		JSONObject send = new JSONObject();
-		send.put("start", "Sender initialized");
 		if(action.equals("getData")){
-			
+			send.put("num", num);
 			send.put("x", 50);
 			send.put("y", 0);
 			send.put("z", 50);
