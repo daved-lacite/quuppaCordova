@@ -8,7 +8,7 @@
     <keywords>cordova,quuppaa</keywords>
 
     <js-module src="www/quuppaCordova.js" name="device">
-        <clobbers target="window.quuppaCordova" />
+        <clobbers target="cordova.plugins.quuppaCordova" />
     </js-module>
 
     <!-- android -->

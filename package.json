@@ -1,0 +1,20 @@
+{
+  "name": "quuppa-cordova",
+  "version": "0.0.1",
+  "description": "Cordova plugin for quuppa tag location",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daved-lacite/quuppaCordova.git"
+  },
+  "keywords": [
+    "cordova"
+  ],
+  "author": "daved",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/daved-lacite/quuppaCordova/issues"
+  },
+  "homepage": "https://github.com/daved-lacite/quuppaCordova#readme"
+}
