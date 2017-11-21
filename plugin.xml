@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://cordova.apache.org/ns/plugins/1.0"
+        id="com.quuppaCordova.cordova.plugin"
+        version="0.0.1">
+    <name>Quuppa Locator</name>
+    <description>Quuppa tag locator</description>
+    <license>Apache 2.0</license>
+    <keywords>cordova,quuppaa</keywords>
+
+    <js-module src="www/quuppaCordova.js" name="device">
+        <clobbers target="window.quuppaCordova" />
+    </js-module>
+
+    <!-- android -->
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="quuppaCordova" >
+                <param name="android-package" value="com.quuppaCordova.cordova.plugin" />
+            </feature>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/*">
+            <uses-permission android:name="android.permission.WAKE_LOCK" />
+        </config-file>
+
+        <source-file src="src/android/quuppaCordova.java" target-dir="src/org/apache/cordova/powermanagement" />
+    </platform>
+</plugin>
