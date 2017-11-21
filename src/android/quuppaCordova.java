@@ -30,4 +30,9 @@ public class quuppaCordova extends CordovaPlugin{
 		callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, send));
 		return false;
 	}
+
+	@Override
+	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+	    super.initialize(cordova, webView);
+	}
 }
