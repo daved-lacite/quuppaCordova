@@ -20,14 +20,15 @@ public class quuppaCordova extends CordovaPlugin{
 	public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException{
 		JSONObject send = new JSONObject();
 		if(action.equals("getData")){
-			send.put("obj", receiver.getInfo());
+			System.err.println(receiver.getInfo());
+			//send.put("obj", receiver.getInfo());
 			/*try{
 				dsocket.receive(packet);
 				obj = new String(buffer, 0, packet.getLength());
 			}catch(Exception e){
             	System.err.println(e);
         	}*/
-			callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, send));
+			//callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, send));
 			return true;
 		}
 		send.put("error", "Method not found");
