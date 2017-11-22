@@ -12,7 +12,8 @@ import java.nio.channels.DatagramChannel;
 import java.net.*;
 
 public class quuppaCordova extends CordovaPlugin{
-	Receiver receiver = new Receiver();
+	private Info info = new Info();
+	private Receiver receiver = new Receiver(info);
 
 	public quuppaCordova(){}
 
@@ -20,15 +21,9 @@ public class quuppaCordova extends CordovaPlugin{
 	public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException{
 		JSONObject send = new JSONObject();
 		if(action.equals("getData")){
-			System.err.println(receiver.getInfo());
-			//send.put("obj", receiver.getInfo());
-			/*try{
-				dsocket.receive(packet);
-				obj = new String(buffer, 0, packet.getLength());
-			}catch(Exception e){
-            	System.err.println(e);
-        	}*/
-			//callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, send));
+			send.put("obj", info.getData());
+			
+			callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, send));
 			return true;
 		}
 		send.put("error", "Method not found");
@@ -40,8 +35,7 @@ public class quuppaCordova extends CordovaPlugin{
 	@Override
 	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
 	    super.initialize(cordova, webView);
-	    Thread tagInfo = new Thread(receiver);
-	    tagInfo.start();
+	    receiver.start();
 	}
 
 	private class Receiver implements Runnable{
@@ -51,8 +45,16 @@ public class quuppaCordova extends CordovaPlugin{
 	    private byte[] buffer = new byte[2048];
 	    private DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 	    private String obj;
+	    private Info info;
 	    
-	    public Receiver(){}
+	    public Receiver(Info info){
+	    	this.info = info;
+	    }
+
+	    public void start(){
+	    	Thread tagInfo = new Thread(new Receiver(this.info));
+	    	tagInfo.start();
+	    }
 
 		@Override
 		public void run(){
@@ -64,6 +66,7 @@ public class quuppaCordova extends CordovaPlugin{
 		    	while(true){
 					dsocket.receive(packet);
 					obj = new String(buffer, 0, packet.getLength());
+					this.info.setData(obj.replaceAll("\\r|\\n", ""));
 				}
 		    }catch(Exception e){
 	            System.err.println(e);
@@ -72,6 +75,22 @@ public class quuppaCordova extends CordovaPlugin{
 
 		public String getInfo(){
 			return obj;
+		}
+	}
+
+	private class Info{
+		private String data = null;
+
+		public void Info(){
+
+		}
+
+		public String getData(){
+			return this.data;
+		}
+
+		public void setData(String val){
+			this.data = val;
 		}
 	}
 }
