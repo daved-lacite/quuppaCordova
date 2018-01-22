@@ -15,8 +15,9 @@ import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseData;
 import android.bluetooth.le.AdvertiseSettings;
 import android.bluetooth.le.BluetoothLeAdvertiser;
-
+import android.provider.Settings;
 import java.net.*;
+import java.util.Arrays;
 
 public class quuppaCordova extends CordovaPlugin{
 	private Info info = new Info();
@@ -122,7 +123,7 @@ public class quuppaCordova extends CordovaPlugin{
         int txPower = 3;
         byte[] bytes = createBytes();
         try{
-            BluetoothManager btManager = (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
+            BluetoothManager btManager = (BluetoothManager) getSystemService("bluetooth");
             BluetoothAdapter btAdapter = btManager.getAdapter();
             if (btAdapter.isEnabled()) {
                 AdvertiseSettings advertiseSettings = new AdvertiseSettings.Builder()
@@ -194,4 +195,39 @@ public class quuppaCordova extends CordovaPlugin{
             final String message = "Start Status broadcast failed error code: " + i;
         }
     };
+
+    private class CRC8 {
+        public static final byte INITIAL_REGISTER_VALUE = (byte)0x00;
+
+        public static byte simpleCRC(java.io.InputStream s, byte reg) throws java.io.IOException {
+            byte bitMask = (byte)(1 << 7);
+
+            // Process each message byte.
+            int value = s.read();
+            while (value != -1) {
+                byte element = (byte)value;
+
+                reg ^= element;
+                for (int i = 0; i < 8; i++) {
+                    if ((reg & bitMask) != 0) {
+                        reg = (byte)((reg << 1) ^ 0x97);
+                    }
+                    else {
+                        reg <<= 1;
+                    }
+                }
+                value = s.read();
+            }
+            reg ^= 0x00;
+
+            return reg;
+        }
+        public static byte simpleCRC(byte[] buffer, byte register) throws java.io.IOException {
+            java.io.ByteArrayInputStream stream = new java.io.ByteArrayInputStream(buffer);
+            return simpleCRC(stream, register);
+        }
+        public static byte simpleCRC(byte[] buffer) throws java.io.IOException {
+            return simpleCRC(buffer, INITIAL_REGISTER_VALUE);
+        }
+    }
 }
